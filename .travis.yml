@@ -1,0 +1,40 @@
+sudo:
+  required
+
+services:
+  - docker
+
+language: java
+
+jdk:
+  - oraclejdk8
+
+os:
+  - linux
+
+env:
+  global:
+    - COMMIT=${TRAVIS_COMMIT::7}
+
+branches:
+  only:
+    - master
+
+after_success:
+
+   #LOGIN
+  - docker login -u $D_USER -p $D_PASS
+
+   #TAG
+  - export TAG=`if [ "$TRAVIS_BRANCH" == "master" ]; then echo "latest"; else echo $TRAVIS_BRANCH ; fi`
+
+   #DATAWAREHOUSE
+  - export DATAWAREHOUSEGATEWAY=vadimeladii7/data-warehouse-gateway
+  - docker build -t $DATAWAREHOUSEGATEWAY:$COMMIT ./
+  - docker tag $DATAWAREHOUSEGATEWAY:$COMMIT $DATAWAREHOUSEGATEWAY:$TAG
+  - docker push $DATAWAREHOUSEGATEWAY
+
+
+notifications:
+  email:
+    - vadimeladii@gmail.com
