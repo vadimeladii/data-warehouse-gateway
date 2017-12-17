@@ -20,6 +20,10 @@ public class AuthorHystrixIntegration {
         return Response.serverError().entity(Collections.emptyList()).build();
     }
 
+    public Response findOneDefault(Long id) {
+        return Response.serverError().entity(null).build();
+    }
+
     @HystrixCommand(fallbackMethod = "findAllDefault")
     public Response findAll() {
         return Response.ok().entity(authorClient.findAll()).build();
@@ -29,6 +33,7 @@ public class AuthorHystrixIntegration {
         return Response.status(Response.Status.CREATED).entity(authorClient.create(authorView)).build();
     }
 
+    @HystrixCommand(fallbackMethod = "findOneDefault")
     public Response findById(Long id) {
         return Response.ok().entity(authorClient.findById(id)).build();
     }
