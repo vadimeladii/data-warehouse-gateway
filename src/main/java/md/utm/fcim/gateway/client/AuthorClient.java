@@ -1,6 +1,7 @@
 package md.utm.fcim.gateway.client;
 
 import md.utm.fcim.gateway.view.AuthorView;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,12 +14,15 @@ import java.util.List;
 public interface AuthorClient {
 
     @RequestMapping(method = RequestMethod.GET, value = "/api/author/{id}")
-    AuthorView findById(@PathVariable("id") Long id);
+    @Cacheable(value = "author")
+    Object findById(@PathVariable("id") Long id);
 
     @RequestMapping(method = RequestMethod.GET, value = "/api/author")
-    List<AuthorView> findAll();
+    @Cacheable(value = "authors")
+    Object findAll();
 
     @RequestMapping(method = RequestMethod.GET, value = "/api/author/pages")
+    @Cacheable(value = "authorPage")
     Object findPage(@RequestParam("page") Integer page, @RequestParam("size") Integer size);
 
     @RequestMapping(method = RequestMethod.POST, value = "/api/author", consumes = "application/json")
