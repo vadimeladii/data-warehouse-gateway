@@ -3,6 +3,7 @@ package md.utm.fcim.gateway.config.jersey;
 import io.swagger.jaxrs.config.BeanConfig;
 import io.swagger.jaxrs.listing.ApiListingResource;
 import io.swagger.jaxrs.listing.SwaggerSerializers;
+import md.utm.fcim.gateway.config.filter.CORSResponseFilter;
 import md.utm.fcim.gateway.controller.impl.AuthorControllerImpl;
 import md.utm.fcim.gateway.controller.impl.BookControllerImpl;
 import md.utm.fcim.gateway.error.IllegalArgumentExceptionMapper;
@@ -30,6 +31,7 @@ public class JerseyConfig extends ResourceConfig {
         register(BookControllerImpl.class);
         register(AuthorControllerImpl.class);
         register(IllegalArgumentExceptionMapper.class);
+        register(CORSResponseFilter.class);
     }
 
     private void configureSwagger() {
